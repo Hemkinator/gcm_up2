@@ -28,6 +28,7 @@ public class GCMDemoActivity extends BaseActivity {
 
    private int mCurrSpinnerPos = 0;
 
+
    @Override
    public void onCreate(Bundle icicle) {
       super.onCreate(icicle);
@@ -36,14 +37,14 @@ public class GCMDemoActivity extends BaseActivity {
       if (icicle == null) {
          DemoBaseFragment fragment = GcmDemoFragment.newInstance();
          getSupportFragmentManager().beginTransaction()
-               .replace(R.id.demo_fragment_container, fragment).commit();
+                 .replace(R.id.demo_fragment_container, fragment).commit();
       }
 
       final Intent intent = getIntent();
       String msg = intent.getStringExtra(Constants.KEY_MESSAGE_TXT);
       if (msg != null) {
-         final NotificationManager manager = 
-               (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+         final NotificationManager manager =
+                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
          manager.cancel(Constants.NOTIFICATION_NR);
          String msgTxt = getString(R.string.msg_received, msg);
          Crouton.showText(this, "Received!!", Style.INFO);

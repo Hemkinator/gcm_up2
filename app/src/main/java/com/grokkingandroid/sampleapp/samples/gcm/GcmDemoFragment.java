@@ -54,6 +54,7 @@ public class GcmDemoFragment extends DemoBaseFragment implements
    private TextView mTxtMsg;
    private State mState = State.UNREGISTERED;
 
+
    public static GcmDemoFragment newInstance() {
       return new GcmDemoFragment();
    }
@@ -96,6 +97,7 @@ public class GcmDemoFragment extends DemoBaseFragment implements
          btnSelectAccount.setVisibility(View.GONE);
       }
       Log.v("grokking", "onCreateContentView");
+      sendMessage();
    }
 
    private State getCurrState() {
@@ -161,6 +163,8 @@ public class GcmDemoFragment extends DemoBaseFragment implements
             break;
          }
       } else if (view.getId() == R.id.btn_send_message) {
+         System.out.println("HELLO, WORKING?");
+         //
          sendMessage();
       } else if (view.getId() == R.id.btn_select_account) {
          startAccountSelector();
@@ -202,19 +206,12 @@ public class GcmDemoFragment extends DemoBaseFragment implements
    }
 
    private void sendMessage() {
+      System.out.println("SENDING ");
       Intent msgIntent = new Intent(getActivity(), GcmIntentService.class);
       msgIntent.setAction(Constants.ACTION_ECHO);
-      String msg;
-      if (!TextUtils.isEmpty(mTxtMsg.getText())) {
-         msg = mTxtMsg.getText().toString();
-         mTxtMsg.setText("");
-      }
-      else {
-         msg = getActivity().getString(R.string.no_message);
-      }
-      String msgTxt = getString(R.string.msg_sent, msg);
+      String msgTxt = getString(R.string.msg_sent, "");
       Crouton.showText(getActivity(), msgTxt, Style.INFO);            
-      msgIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
+      msgIntent.putExtra(Constants.KEY_MESSAGE_TXT, "");
       getActivity().startService(msgIntent);
    }
 

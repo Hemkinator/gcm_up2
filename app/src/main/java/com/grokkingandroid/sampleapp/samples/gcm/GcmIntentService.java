@@ -36,11 +36,15 @@ import com.grokkingandroid.sampleapp.samples.gcm.Constants.EventbusMessageType;
 import com.grokkingandroid.sampleapp.samples.gcm.Constants.State;
 
 import de.greenrobot.event.EventBus;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class GcmIntentService extends IntentService {
 
    private NotificationManager mNotificationManager;
    private String mSenderId = null;
+   private String[] msgs = {"CSE", "110", "IS", "A", "CLASS"};
+   private int counter = 0;
 
    public GcmIntentService() {
       super("GcmIntentService");
@@ -59,7 +63,15 @@ public class GcmIntentService extends IntentService {
       } else if (action.equals(Constants.ACTION_UNREGISTER)) {
          unregister(gcm, intent);
       } else if (action.equals(Constants.ACTION_ECHO)) {
-         sendMessage(gcm, intent);
+         for(String msg : msgs){
+            System.out.println("THREADING");
+            intent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
+            try {
+               Thread.sleep(10000);
+               sendMessage(gcm, intent);
+            } catch (InterruptedException i) {
+            }
+         }
       }
 
       // handling of stuff as described on
