@@ -218,7 +218,7 @@ public class CcsClient {
         if (msg.getPayload().get("action") != null) {
             System.out.println(msg.getPayload().get("message"));
             PayloadProcessor processor = ProcessorFactory.getProcessor(msg.getPayload().get("action"));
-            processor.handleMessage(msg);
+           // processor.handleMessage(msg);
         }
     }
     
@@ -434,13 +434,15 @@ public class CcsClient {
             CcsMessage msg = getMessage(jsonMap);
             // Normal upstream data message
             try {
+                System.out.println("TRY CATCH");
                 handleIncomingDataMessage(msg);
                 // Send ACK to CCS
                 String apiKey = "AIzaSyDZhGNm86XXayUjfNlWgvQr_1K6v1SI3ZQ";
                 Content content = createContent(msg);
+
                 Post2Gcm.post(apiKey, content);
                 String ack = createJsonAck(msg.getFrom(), msg.getMessageId());
-                send(ack);
+                //send(ack);
             }
             catch (Exception e) {
                 // Send NACK to CCS
@@ -448,11 +450,25 @@ public class CcsClient {
                 send(nack);
             }
         } else if ("ack".equals(messageType.toString())) {
+            System.out.println("ACKING");
+            System.out.println("ACKING");
+            System.out.println("ACKING");
+            System.out.println("ACKING");
+            System.out.println("ACKING");
+            System.out.println("ACKING");
+            System.out.println("ACKING");
             // Process Ack
             handleAckReceipt(jsonMap);
         } else if ("nack".equals(messageType.toString())) {
             // Process Nack
-            handleNackReceipt(jsonMap);
+            //handleNackReceipt(jsonMap);
+            System.out.println("NACKING");
+            System.out.println("NACKING");
+            System.out.println("NACKING");
+            System.out.println("NACKING");
+            System.out.println("NACKING");
+            System.out.println("NACKING");
+            System.out.println("NACKING");
         } else {
             logger.log(Level.WARNING, "Unrecognized message type (%s)",
                     messageType.toString());
@@ -463,7 +479,7 @@ public class CcsClient {
         final String projectId = "514635246835";
         final String password = "";
         //final String toRegId = "APA91bGtjDTQ3SAb69VfzW6FaBy6Wq-5KqX9T1qu7LX-DKHu8FNpqzgaoZ8oR4OQ8fRmues4q3rW7FgyrSB19l4RiTiIPyHNHjGXy3VpbbxlmgVZEmrTeO7uKDg0NRNHvPNt9VK9K9Ol";
-        final String toRegId ="APA91bE0O9JqQADkzsSNa2dF-J1gp8dFy50oq2CaiyCF-uu9ZucxN_k5KlIkPS0X-YyqY93hV1VMjyqoc7Lvnn4pwKwgjZTFafn73Ok9RG0Jqc_PRofsFNcr4yzHWh7apqU-TeyLPB11";
+        final String toRegId ="APA91bHV-Vx-L15Z9KnqN8fTlEHOPb3g3Ef7g6brbo92bFUm2BJIzz55oR_kSnu63TYnbT43akD-0phVsTbS5viYps76y7dXN7MJ3XGYbY58cItcVdxkSf74UI6CURLA5Ceb8Wo9Lc8j";
         //final String toRegId = "APA91bGNKqkUQsqv3-Yjh2f84U8Z9v4z6hQ1XUy2g9pDztwGcB28SITCZFBPKgUGVJOvu-oYUyt--fdKiEuxq45vJRZjPYrvYUXQOe9Q0xmBpwofNUTjVNitQW3A1D16rlN0xeoszsZa";
         CcsClient ccsClient = CcsClient.prepareClient(projectId, password, true);
 
@@ -489,15 +505,26 @@ public class CcsClient {
 
     }
     }
-    public static Content createContent(CcsMessage msg ) {
+
+    public static Content createContent(CcsMessage msg) {
         Content c = new Content();
 
         //c.addRegId("APA91bGNKqkUQsqv3-Yjh2f84U8Z9v4z6hQ1XUy2g9pDztwGcB28SITCZFBPKgUGVJOvu-oYUyt--fdKiEuxq45vJRZjPYrvYUXQOe9Q0xmBpwofNUTjVNitQW3A1D16rlN0xeoszsZa");
        // c.addRegId("APA91bGtjDTQ3SAb69VfzW6FaBy6Wq-5KqX9T1qu7LX-DKHu8FNpqzgaoZ8oR4OQ8fRmues4q3rW7FgyrSB19l4RiTiIPyHNHjGXy3VpbbxlmgVZEmrTeO7uKDg0NRNHvPNt9VK9K9Ol");
         System.out.println("herhehrehr");
-        c.addRegId("APA91bGGWEK2Zga9Te_zG2PwzCxXhNd7o5PV2fr_rpdaZUB04h2mOBvxuH2oRvx92ACScGbQFwi5bgggZIhNB41WY0cjwaj70oPKGeJu4sPKVgP0ECLv_uucDdar3S8OFCfcV60nBfl1");
-            String str = msg.getPayload().get("message");
-        c.createData(str, "popop");
+        String str = msg.getPayload().get("message");
+        String regId = msg.getPayload().get("receiver");
+        c.addRegId(regId);
+
+        System.out.println("CREATING CONTENT HELLO");
+        System.out.println("CREATING CONTENT HELLO");
+        System.out.println("CREATING CONTENT HELLO");
+        System.out.println("CREATING CONTENT HELLO");
+        System.out.println("CREATING CONTENT HELLO");
+        System.out.println("CREATING CONTENT HELLO");
+        System.out.println("CREATING CONTENT HELLO");
+        System.out.println("CREATING CONTENT HELLO");
+        c.createData(str, str);
 
         return c;
     }
