@@ -442,7 +442,7 @@ public class CcsClient {
 
                 Post2Gcm.post(apiKey, content);
                 String ack = createJsonAck(msg.getFrom(), msg.getMessageId());
-                //send(ack);
+                send(ack);
             }
             catch (Exception e) {
                 // Send NACK to CCS
