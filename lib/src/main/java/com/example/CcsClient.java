@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -218,7 +219,7 @@ public class CcsClient {
         if (msg.getPayload().get("action") != null) {
             System.out.println(msg.getPayload().get("message"));
             PayloadProcessor processor = ProcessorFactory.getProcessor(msg.getPayload().get("action"));
-           // processor.handleMessage(msg);
+            processor.handleMessage(msg);
         }
     }
     
@@ -318,15 +319,20 @@ public class CcsClient {
      * an application.
      *
      * @param to RegistrationId of the device who sent the upstream message.
-     * @param messageId messageId of the upstream message to be acknowledged to
+     * @param msgId messageId of the upstream message to be acknowledged to
      * CCS.
      * @return JSON encoded ack.
      */
-    public static String createJsonAck(String to, String messageId) {
+    public static String createJsonAck(Map<String, String> map, String to, String msgId) {
         Map<String, Object> message = new HashMap<String, Object>();
         message.put("message_type", "ack");
+        Set<String> keys = map.keySet();
+        for(String key : keys) {
+            message.put(key, map.get(key));
+        }
+        message.put("message_id", msgId);
+        message.put("message_type", "nack");
         message.put("to", to);
-        message.put("message_id", messageId);
         return JSONValue.toJSONString(message);
     }
 
@@ -340,11 +346,16 @@ public class CcsClient {
      * CCS.
      * @return JSON encoded nack.
      */
-    public static String createJsonNack(String to, String messageId) {
+    public static String createJsonNack(Map<String, String> map, String to, String msgId) {
         Map<String, Object> message = new HashMap<String, Object>();
         message.put("message_type", "nack");
+        Set<String> keys = map.keySet();
+        for(String key : keys){
+            message.put(key, map.get(key));
+        }
+        message.put("message_type", "nack");
         message.put("to", to);
-        message.put("message_id", messageId);
+        message.put("message_id", msgId);
         return JSONValue.toJSONString(message);
     }
 
@@ -405,9 +416,9 @@ public class CcsClient {
             GcmPacketExtension gcmPacket
                     = (GcmPacketExtension) incomingMessage.getExtension(GCM_NAMESPACE);
             String json = gcmPacket.getJson();
-            System.out.print(json);
+            System.out.print("JSON " + json);
             try {
-                @SuppressWarnings("unchecked")
+                //@SuppressWarnings("unchecked")
                 Map<String, Object> jsonMap
                         = (Map<String, Object>) JSONValue.parseWithException(json);
 
@@ -441,12 +452,12 @@ public class CcsClient {
                 Content content = createContent(msg);
 
                 Post2Gcm.post(apiKey, content);
-                String ack = createJsonAck(msg.getFrom(), msg.getMessageId());
+                String ack = createJsonAck(msg.getPayload(), msg.getFrom(), msg.getMessageId());
                 send(ack);
             }
             catch (Exception e) {
                 // Send NACK to CCS
-                String nack = createJsonNack(msg.getFrom(), msg.getMessageId());
+                String nack = createJsonNack(msg.getPayload(), msg.getFrom(), msg.getMessageId());
                 send(nack);
             }
         } else if ("ack".equals(messageType.toString())) {
