@@ -202,6 +202,7 @@ public class CcsClient {
             long timeToLive, Boolean delayWhileIdle, List<String> recipients) {
         Map map = createAttributeMap(null, null, payload, collapseKey,
                     timeToLive, delayWhileIdle);
+        System.out.println("SENDING BROADCAST: HOORAY");
         for (String toRegId: recipients) {
             String messageId = getRandomMessageId();
             map.put("message_id", messageId);
@@ -218,8 +219,8 @@ public class CcsClient {
     public void handleIncomingDataMessage(CcsMessage msg) {
         if (msg.getPayload().get("action") != null) {
             System.out.println(msg.getPayload().get("message"));
-            PayloadProcessor processor = ProcessorFactory.getProcessor(msg.getPayload().get("action"));
-            processor.handleMessage(msg);
+           // PayloadProcessor processor = ProcessorFactory.getProcessor(msg.getPayload().get("action"));
+           // processor.handleMessage(msg);
         }
     }
     
@@ -418,7 +419,7 @@ public class CcsClient {
             String json = gcmPacket.getJson();
             System.out.print("JSON " + json);
             try {
-                //@SuppressWarnings("unchecked")
+                @SuppressWarnings("unchecked")
                 Map<String, Object> jsonMap
                         = (Map<String, Object>) JSONValue.parseWithException(json);
 
@@ -525,6 +526,7 @@ public class CcsClient {
         System.out.println("herhehrehr");
         String str = msg.getPayload().get("message");
         String regId = msg.getPayload().get("receiver");
+        System.out.println("receiver " + regId);
         c.addRegId(regId);
 
         System.out.println("CREATING CONTENT HELLO");

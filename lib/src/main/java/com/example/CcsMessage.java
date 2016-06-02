@@ -50,6 +50,8 @@ public class CcsMessage {
         return mFrom;
     }
 
+    public String getReceiver() { return mPayload.get("receiver"); }
+
     public String getCategory() {
         return mCategory;
     }

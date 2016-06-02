@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 public class Content implements Serializable{
 
@@ -27,7 +28,6 @@ public class Content implements Serializable{
         if(data == null) {
             data = new HashMap<String, String>();
         }
-
         data.put("title", title);
         data.put("message", message);
     }

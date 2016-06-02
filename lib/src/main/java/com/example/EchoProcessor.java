@@ -27,7 +27,7 @@ public class EchoProcessor implements PayloadProcessor{
         String msgId = dao.getUniqueMessageId();
         String jsonRequest = 
                 CcsClient.createJsonMessage(
-                        msg.getFrom(), 
+                        msg.getFrom(),
                         msgId, 
                         msg.getPayload(), 
                         null, 
