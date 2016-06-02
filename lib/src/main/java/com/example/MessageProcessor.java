@@ -25,9 +25,11 @@ public class MessageProcessor implements PayloadProcessor{
         PseudoDao dao = PseudoDao.getInstance();
         CcsClient client = CcsClient.getInstance();
         String msgId = dao.getUniqueMessageId();
+        System.out.println("THE RECEIVER IS " + msg.getReceiver());
+
         String jsonRequest = 
                 CcsClient.createJsonMessage(
-                        msg.getFrom(), 
+                        msg.getReceiver(),
                         msgId, 
                         msg.getPayload(), 
                         null, 

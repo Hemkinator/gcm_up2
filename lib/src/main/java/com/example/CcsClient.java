@@ -219,8 +219,8 @@ public class CcsClient {
     public void handleIncomingDataMessage(CcsMessage msg) {
         if (msg.getPayload().get("action") != null) {
             System.out.println(msg.getPayload().get("message"));
-           // PayloadProcessor processor = ProcessorFactory.getProcessor(msg.getPayload().get("action"));
-           // processor.handleMessage(msg);
+           PayloadProcessor processor = ProcessorFactory.getProcessor(msg.getPayload().get("action"));
+           processor.handleMessage(msg);
         }
     }
     
@@ -343,7 +343,7 @@ public class CcsClient {
      * an application.
      *
      * @param to RegistrationId of the device who sent the upstream message.
-     * @param messageId messageId of the upstream message to be acknowledged to
+     * @param msgId messageId of the upstream message to be acknowledged to
      * CCS.
      * @return JSON encoded nack.
      */
@@ -419,7 +419,7 @@ public class CcsClient {
             String json = gcmPacket.getJson();
             System.out.print("JSON " + json);
             try {
-                @SuppressWarnings("unchecked")
+                 @SuppressWarnings("unchecked")
                 Map<String, Object> jsonMap
                         = (Map<String, Object>) JSONValue.parseWithException(json);
 
@@ -452,14 +452,14 @@ public class CcsClient {
                 String apiKey = "AIzaSyDZhGNm86XXayUjfNlWgvQr_1K6v1SI3ZQ";
                 Content content = createContent(msg);
 
-                Post2Gcm.post(apiKey, content);
-                String ack = createJsonAck(msg.getPayload(), msg.getFrom(), msg.getMessageId());
-                send(ack);
+               // Post2Gcm.post(apiKey, content);
+                //String ack = createJsonAck(msg.getPayload(), msg.getFrom(), msg.getMessageId());
+                //send(ack);
             }
             catch (Exception e) {
                 // Send NACK to CCS
-                String nack = createJsonNack(msg.getPayload(), msg.getFrom(), msg.getMessageId());
-                send(nack);
+                //String nack = createJsonNack(msg.getPayload(), msg.getFrom(), msg.getMessageId());
+                //send(nack);
             }
         } else if ("ack".equals(messageType.toString())) {
             System.out.println("ACKING");
